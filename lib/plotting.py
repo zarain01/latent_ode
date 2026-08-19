@@ -105,7 +105,7 @@ def plot_vector_field(ax, odefunc, latent_dim, device):
 	zs = torch.from_numpy(np.stack([x, y], -1).reshape(K * K, 2)).to(device, torch.float32)
 	if latent_dim > 2:
 		# Plots dimensions 0 and 2
-		zs = torch.cat((zs, torch.zeros(K * K, latent_dim-2)), 1)
+		zs = torch.cat((zs, torch.zeros(K * K, latent_dim-2, device=zs.device)), 1)
 	dydt = odefunc(0, zs)
 	dydt = -dydt.cpu().detach().numpy()
 	if latent_dim > 2:
@@ -207,7 +207,7 @@ class Visualizations():
 		z0_grid = z0_grid.to(get_device(data))
 
 		if model.latent_dim > 2:
-			z0_grid = torch.cat((z0_grid, torch.zeros(z0_grid.size(0), model.latent_dim-2)), 1)
+			z0_grid = torch.cat((z0_grid, torch.zeros(z0_grid.size(0), model.latent_dim-2, device=z0_grid.device)), 1)
 
 		if model.use_poisson_proc:
 			n_traj, n_dims = z0_grid.size()
